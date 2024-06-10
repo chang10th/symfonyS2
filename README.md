@@ -212,16 +212,13 @@ erDiagram
 ```
 ---
 
-### Commandes Utilisées
+## Commandes Utilisées
+
+### Commandes basiques
 
 ```bash
 # Installation d'un projet Symfony 7.1
 symfony new "nomDuProjet" --version="7.1.*" --webapp
-```
-
-```bash
-# Création d'une base de données (configurer le .env avant)
-php bin/console doctrine:database:create
 ```
 
 ```bash
@@ -232,4 +229,16 @@ symfony serv:start
 ```bash
 # Commande pour stopper le projet
 symfony serv:stop
+```
+
+### Commandes pour la base de données
+
+```bash
+# Création d'une base de données (configurer le .env avant)
+php bin/console doctrine:database:create
+```
+
+```bash
+# Création d'une entitée
+symfony console make:entity
 ```
