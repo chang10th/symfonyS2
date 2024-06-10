@@ -210,3 +210,26 @@ erDiagram
     Customer ||--o{ Order : has
     OrderLine }|--|| Product : inside
 ```
+---
+
+### Commandes Utilisées
+
+```bash
+# Installation d'un projet Symfony 7.1
+symfony new "nomDuProjet" --version="7.1.*" --webapp
+```
+
+```bash
+# Création d'une base de données (configurer le .env avant)
+php bin/console doctrine:database:create
+```
+
+```bash
+# Commande pour lancer le projet
+symfony serv:start
+```
+
+```bash
+# Commande pour stopper le projet
+symfony serv:stop
+```
