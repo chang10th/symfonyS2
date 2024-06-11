@@ -214,12 +214,14 @@ erDiagram
 
 ## Commandes Utilisées
 
-### Commandes basiques
+### Commandes d'installation
 
 ```bash
 # Installation d'un projet Symfony 7.1
 symfony new "nomDuProjet" --version="7.1.*" --webapp
 ```
+
+### Commandes basiques
 
 ```bash
 # Commande pour lancer le projet
@@ -229,6 +231,11 @@ symfony serv:start
 ```bash
 # Commande pour stopper le projet
 symfony serv:stop
+```
+
+```bash
+# Commande pour créer un CRUD
+symfony console make:crud
 ```
 
 ### Commandes pour la base de données
@@ -241,4 +248,6 @@ php bin/console doctrine:database:create
 ```bash
 # Création d'une entitée
 symfony console make:entity
+# Si vous n'avez pas la CLI de symfony installé
+php bin/console make:entity
 ```
