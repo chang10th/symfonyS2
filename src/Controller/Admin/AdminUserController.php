@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -23,13 +23,19 @@ class AdminUserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordInterface $userPasswordHasherInterface, User $user=null): Response
     {
-        $user = new User();
+        if($user === null)
+            $user = new User();
+        
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData(); 
+            $user->setPassword($userPasswordHasherInterface->hashPassword($user, $plainPassword));
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -39,6 +45,7 @@ class AdminUserController extends AbstractController
         return $this->render('admin_user/new.html.twig', [
             'user' => $user,
             'form' => $form,
+            'edit' => $user->getId()?true:false,
         ]);
     }
 
@@ -49,7 +56,7 @@ class AdminUserController extends AbstractController
             'user' => $user,
         ]);
     }
-
+/**
     #[Route('/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -67,6 +74,7 @@ class AdminUserController extends AbstractController
             'form' => $form,
         ]);
     }
+*/
 
     #[Route('/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response

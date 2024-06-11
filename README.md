@@ -238,6 +238,11 @@ symfony serv:stop
 symfony console make:crud
 ```
 
+```bash
+# Commande pour créer un controller
+symfony console make:controller
+```
+
 ### Commandes pour la base de données
 
 ```bash
