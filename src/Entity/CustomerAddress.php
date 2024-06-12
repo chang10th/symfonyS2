@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CustomerAddressRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerAddressRepository::class)]
@@ -14,37 +13,31 @@ class CustomerAddress
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $line1 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $line2 = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $zipcode = null;
+    #[ORM\Column(length: 50)]
+    private ?string $zipCode = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $country = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $type = null;
+    #[ORM\ManyToOne(inversedBy: 'addresses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Customer $customer = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -52,7 +45,7 @@ class CustomerAddress
         return $this->name;
     }
 
-    public function setName(?string $name): static
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -64,7 +57,7 @@ class CustomerAddress
         return $this->line1;
     }
 
-    public function setLine1(?string $line1): static
+    public function setLine1(string $line1): static
     {
         $this->line1 = $line1;
 
@@ -83,14 +76,14 @@ class CustomerAddress
         return $this;
     }
 
-    public function getZipcode(): ?string
+    public function getZipCode(): ?string
     {
-        return $this->zipcode;
+        return $this->zipCode;
     }
 
-    public function setZipcode(?string $zipcode): static
+    public function setZipCode(string $zipCode): static
     {
-        $this->zipcode = $zipcode;
+        $this->zipCode = $zipCode;
 
         return $this;
     }
@@ -100,7 +93,7 @@ class CustomerAddress
         return $this->city;
     }
 
-    public function setCity(?string $city): static
+    public function setCity(string $city): static
     {
         $this->city = $city;
 
@@ -112,21 +105,21 @@ class CustomerAddress
         return $this->country;
     }
 
-    public function setCountry(?string $country): static
+    public function setCountry(string $country): static
     {
         $this->country = $country;
 
         return $this;
     }
 
-    public function getType(): ?array
+    public function getCustomer(): ?Customer
     {
-        return $this->type;
+        return $this->customer;
     }
 
-    public function setType(?array $type): static
+    public function setCustomer(?Customer $customer): static
     {
-        $this->type = $type;
+        $this->customer = $customer;
 
         return $this;
     }

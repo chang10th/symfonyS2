@@ -8,6 +8,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 class UserType extends AbstractType
@@ -34,16 +38,16 @@ class UserType extends AbstractType
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options' => ['toggle' => true, 'label' => 'Password'],
-                'seconf_options' => ['toggle' => true, 'label' => 'Registration.RepeatPassword'],
+                'second_options' => ['toggle' => true, 'label' => 'Registration.RepeatPassword'],
             ])
-            ->add('role', ChoiceType::class, [
+            ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Api' => 'ROLE_API',
                     'Admin' => 'ROLE_ADMIN',
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'Admin' => 'Rôles',
+                'label' => 'Rôles',
             ])
         ;
     }

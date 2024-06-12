@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -14,28 +15,36 @@ class Customer
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $phone = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthdate_at = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $bithdateAt = null;
+
+    #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, CustomerAddress>
+     */
+    #[ORM\OneToMany(targetEntity: CustomerAddress::class, mappedBy: 'customer', orphanRemoval: true)]
+    private Collection $addresses;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getLastname(): ?string
@@ -43,7 +52,7 @@ class Customer
         return $this->lastname;
     }
 
-    public function setLastname(?string $lastname): static
+    public function setLastname(string $lastname): static
     {
         $this->lastname = $lastname;
 
@@ -55,7 +64,7 @@ class Customer
         return $this->firstname;
     }
 
-    public function setFirstname(?string $firstname): static
+    public function setFirstname(string $firstname): static
     {
         $this->firstname = $firstname;
 
@@ -67,21 +76,63 @@ class Customer
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): static
+    public function setPhone(string $phone): static
     {
         $this->phone = $phone;
 
         return $this;
     }
 
-    public function getBirthdateAt(): ?\DateTimeInterface
+    public function getBithdateAt(): ?\DateTimeImmutable
     {
-        return $this->birthdate_at;
+        return $this->bithdateAt;
     }
 
-    public function setBirthdateAt(?\DateTimeInterface $birthdate_at): static
+    public function setBithdateAt(?\DateTimeImmutable $bithdateAt): static
     {
-        $this->birthdate_at = $birthdate_at;
+        $this->bithdateAt = $bithdateAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomerAddress>
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(CustomerAddress $address): static
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(CustomerAddress $address): static
+    {
+        if ($this->addresses->removeElement($address)) {
+            // set the owning side to null (unless already changed)
+            if ($address->getCustomer() === $this) {
+                $address->setCustomer(null);
+            }
+        }
 
         return $this;
     }
