@@ -256,3 +256,8 @@ symfony console make:entity
 # Si vous n'avez pas la CLI de symfony installé
 php bin/console make:entity
 ```
+
+```bash
+# Accéder à MariaDB Monitor
+mysql -u root -p -h 127.0.0.1 -P 3306
+```
